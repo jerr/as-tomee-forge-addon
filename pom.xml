@@ -2,15 +2,16 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.jboss.forge.addon.as.tomee</groupId>
-  <artifactId>as-tomee-forge-addon</artifactId>
+  <groupId>org.jboss.forge.addon</groupId>
+  <artifactId>as-tomee</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <properties>
     <version.furnace>2.3.0.Final</version.furnace>
+    <version.as-addon>2.0.0-SNAPSHOT</version.as-addon>
     <version.tomee>1.6.0</version.tomee>
     <version.openejb>4.6.0</version.openejb>
+    <version.org.apache.commons.commons-compress>1.4.1</version.org.apache.commons.commons-compress>
   </properties>
-  
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -23,7 +24,7 @@
       <dependency>
         <groupId>org.jboss.forge.addon</groupId>
         <artifactId>as-spi</artifactId>
-        <version>2.0.0-SNAPSHOT</version>
+        <version>${version.as-addon}</version>
         <classifier>forge-addon</classifier>
       </dependency>
     </dependencies>
@@ -72,6 +73,18 @@
       <groupId>org.apache.openejb</groupId>
       <artifactId>tomee-util</artifactId>
       <version>${version.tomee}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <version>${version.org.apache.commons.commons-compress}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>xz</artifactId>
+          <groupId>org.tukaani</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     
   </dependencies>
