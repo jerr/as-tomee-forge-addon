@@ -33,6 +33,7 @@ import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIValidationContext;
 import org.jboss.forge.addon.ui.result.Result;
+import org.jboss.forge.addon.ui.result.Results;
 
 /**
  * The TomEE application server provider
@@ -91,7 +92,7 @@ public class TomEEProvider extends AbstractFacet<Project> implements Application
       if (project.hasFacet(ConfigurationFacet.class))
          config.setProject(project);
    }
-   
+
    @Override
    public List<Class<? extends UICommand>> getSetupFlow()
    {
@@ -148,15 +149,19 @@ public class TomEEProvider extends AbstractFacet<Project> implements Application
    @Override
    public Result start(UIContext context)
    {
+      if (serverController.isStarted())
+      {
+         return Results.fail("A TomEE Server is already running.");
+      }
       serverController.start(config);
-      return null;
+      return Results.success("TomEE " + config.getVersion() + "  successfully started.");
    }
 
    @Override
    public Result shutdown(UIContext context)
    {
       serverController.stop(config);
-      return null;
+      return Results.success("TomEE shutdown successfully.");
    }
 
    @Override
@@ -164,7 +169,7 @@ public class TomEEProvider extends AbstractFacet<Project> implements Application
    {
       final File content = getContentFile(uiContext);
       serverController.deploy(config, content.getAbsolutePath());
-      return null;
+      return Results.success("The deployment operation (DEPLOY) was successful.");
    }
 
    @Override
@@ -172,7 +177,7 @@ public class TomEEProvider extends AbstractFacet<Project> implements Application
    {
       final File content = getContentFile(uiContext);
       serverController.undeploy(config, content.getAbsolutePath());
-      return null;
+      return Results.success("The deployment operation (UNDEPLOY) was successful.");
    }
 
    private File getContentFile(UIContext uiContext) throws Error
@@ -184,7 +189,7 @@ public class TomEEProvider extends AbstractFacet<Project> implements Application
       // Can't deploy/undeploy what doesn't exist
       if (!packagingFacet.getFinalArtifact().exists())
          throw new Error();
-      
+
       final File content;
       if (path == null)
       {

@@ -6,16 +6,15 @@
  */
 package org.jboss.forge.addon.as.tomee.server;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Properties;
 
+import javax.inject.Singleton;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.openejb.OpenEJBException;
 import org.apache.openejb.assembler.Deployer;
 import org.apache.openejb.assembler.classic.AppInfo;
@@ -27,6 +26,7 @@ import org.jboss.forge.addon.as.tomee.TomEEConfiguration;
  * 
  * @author Jeremie Lagarde
  */
+@Singleton
 public class ServerController
 {
    private RemoteServer server;
@@ -39,8 +39,22 @@ public class ServerController
    public void stop(TomEEConfiguration config)
    {
       run("stop", false, config);
+      try
+      {
+         server.getServer().waitFor();
+         server = null;
+      }
+      catch (InterruptedException e)
+      {
+         throw new Error(e.getMessage(), e);
+      }
    }
 
+   public boolean isStarted()
+   {
+      return (server != null && server.getServer() != null);
+   }
+   
    protected void run(String cmd, boolean checkStarted, TomEEConfiguration config)
    {
 
@@ -54,8 +68,11 @@ public class ServerController
       System.setProperty("server.shutdown.port", Integer.toString(config.getShutdownPort()));
       System.setProperty("server.shutdown.command", "SHUTDOWN");
 
-      server = new RemoteServer();
-      SecurityActions.registerShutdown(server);
+      if (server == null)
+      {
+         server = new RemoteServer();
+         SecurityActions.registerShutdown(server);
+      }
 
       server.start(null, cmd, checkStarted);
    }
@@ -78,11 +95,12 @@ public class ServerController
       final Deployer deployer = (Deployer) lookup("openejb/DeployerBusinessRemote", config);
       try
       {
-         Collection<AppInfo>  infos = deployer.getDeployedApps();
+         Collection<AppInfo> infos = deployer.getDeployedApps();
          for (Iterator iterator = infos.iterator(); iterator.hasNext();)
          {
             AppInfo appInfo = (AppInfo) iterator.next();
-            if(path.startsWith(appInfo.path)) {
+            if (path.startsWith(appInfo.path))
+            {
                deployer.undeploy(appInfo.path);
             }
          }
@@ -92,7 +110,7 @@ public class ServerController
          throw new Error(e.getMessage(), e);
       }
    }
-   
+
    protected Object lookup(String name, TomEEConfiguration config)
    {
       String tomeeHost = "localhost";
