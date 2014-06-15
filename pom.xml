@@ -6,7 +6,8 @@
   <artifactId>as-tomee</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <properties>
-    <version.furnace>2.3.0.Final</version.furnace>
+    <version.forge>2.6.0.Final</version.forge>
+    <version.furnace>2.6.0.Final</version.furnace>
     <version.as-addon>2.0.0-SNAPSHOT</version.as-addon>
     <version.tomee>1.6.0</version.tomee>
     <version.openejb>4.6.0</version.openejb>
@@ -17,7 +18,7 @@
       <dependency>
         <groupId>org.jboss.forge</groupId>
         <artifactId>forge-bom</artifactId>
-        <version>${version.furnace}</version>
+        <version>${version.forge}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -73,6 +74,12 @@
       <groupId>org.apache.openejb</groupId>
       <artifactId>tomee-util</artifactId>
       <version>${version.tomee}</version>
+    </dependency>
+    
+    <dependency>
+        <groupId>org.jboss.spec.javax.rmi</groupId>
+        <artifactId>jboss-rmi-api_1.0_spec</artifactId>
+        <version>1.0.4.Final</version>
     </dependency>
     
     <dependency>

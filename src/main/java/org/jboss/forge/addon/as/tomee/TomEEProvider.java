@@ -18,7 +18,6 @@ import org.jboss.forge.addon.as.tomee.server.ServerController;
 import org.jboss.forge.addon.as.tomee.ui.TomEEConfigurationWizard;
 import org.jboss.forge.addon.configuration.facets.ConfigurationFacet;
 import org.jboss.forge.addon.convert.Converter;
-import org.jboss.forge.addon.dependencies.Coordinate;
 import org.jboss.forge.addon.dependencies.Dependency;
 import org.jboss.forge.addon.dependencies.DependencyResolver;
 import org.jboss.forge.addon.dependencies.builder.CoordinateBuilder;
@@ -27,6 +26,7 @@ import org.jboss.forge.addon.facets.AbstractFacet;
 import org.jboss.forge.addon.facets.constraints.FacetConstraint;
 import org.jboss.forge.addon.projects.Project;
 import org.jboss.forge.addon.projects.ProjectFacet;
+import org.jboss.forge.addon.projects.facets.PackagingFacet;
 import org.jboss.forge.addon.projects.facets.ResourcesFacet;
 import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.ui.command.UICommand;
@@ -162,14 +162,46 @@ public class TomEEProvider extends AbstractFacet<Project> implements Application
    @Override
    public Result deploy(UIContext uiContext)
    {
-      // TODO Auto-generated method stub
+      final File content = getContentFile(uiContext);
+      serverController.deploy(config, content.getAbsolutePath());
       return null;
    }
 
    @Override
    public Result undeploy(UIContext uiContext)
    {
-      // TODO Auto-generated method stub
+      final File content = getContentFile(uiContext);
+      serverController.undeploy(config, content.getAbsolutePath());
       return null;
    }
+
+   private File getContentFile(UIContext uiContext) throws Error
+   {
+      final PackagingFacet packagingFacet = getFaceted().getFacet(
+               PackagingFacet.class);
+      String path = (String) uiContext.getAttributeMap().get("path");
+
+      // Can't deploy/undeploy what doesn't exist
+      if (!packagingFacet.getFinalArtifact().exists())
+         throw new Error();
+      
+      final File content;
+      if (path == null)
+      {
+         content = new File(packagingFacet.getFinalArtifact()
+                  .getFullyQualifiedName());
+      }
+      else if (path.startsWith("/"))
+      {
+         content = new File(path);
+      }
+      else
+      {
+         // TODO this might not work for EAR deployments
+         content = new File(packagingFacet.getFinalArtifact().getParent()
+                  .getFullyQualifiedName(), path);
+      }
+      return content;
+   }
+
 }
