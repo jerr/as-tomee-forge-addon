@@ -6,12 +6,12 @@
   <artifactId>as-tomee</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <properties>
-    <version.forge>2.6.0.Final</version.forge>
-    <version.furnace>2.6.0.Final</version.furnace>
+    <version.forge>2.13.0.Final</version.forge>
+    <version.furnace>2.13.0.Final</version.furnace>
     <version.as-addon>2.0.0-SNAPSHOT</version.as-addon>
-    <version.tomee>1.6.0</version.tomee>
-    <version.openejb>4.6.0</version.openejb>
-    <version.org.apache.commons.commons-compress>1.4.1</version.org.apache.commons.commons-compress>
+    <version.tomee>1.7.1</version.tomee>
+    <version.openejb>4.7.1</version.openejb>
+    <version.org.apache.commons.commons-compress>1.9</version.org.apache.commons.commons-compress>
   </properties>
   <dependencyManagement>
     <dependencies>

@@ -39,7 +39,7 @@ public class TomEEConfiguration extends AbstractFacet<Project>
    /**
     * The default version
     */
-   private static final String DEFAULT_VERSION = "1.6.0.1";
+   private static final String DEFAULT_VERSION = "1.7.1";
    private static final int    DEFAULT_DEBUG_PORT = 5005;
    private static final int    DEFAULT_SHUTDOWN_PORT = 8005;
 
