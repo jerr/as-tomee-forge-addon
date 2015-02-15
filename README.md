@@ -1,4 +1,4 @@
-as-tomee-forge-addon
+tomee-as-forge-addon
 ====================
 
 Forge addon to manage TomEE server
