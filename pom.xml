@@ -6,8 +6,8 @@
   <artifactId>tomee-as</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <properties>
-    <version.forge>2.13.0.Final</version.forge>
-    <version.furnace>2.13.0.Final</version.furnace>
+    <version.forge>2.14.0.Final</version.forge>
+    <version.furnace>2.14.0.Final</version.furnace>
     <version.as-addon>2.0.0-SNAPSHOT</version.as-addon>
     <version.tomee>1.7.1</version.tomee>
     <version.openejb>4.7.1</version.openejb>
@@ -98,23 +98,6 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.jboss.forge.furnace</groupId>
-        <artifactId>furnace-maven-plugin</artifactId>
-        <version>${version.furnace}</version>
-        <executions>
-          <execution>
-            <id>generate-dot</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>generate-dot</goal>
-            </goals>
-            <configuration>
-              <attach>true</attach>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
           <execution>
@@ -140,4 +123,29 @@
       </plugin>
     </plugins>
   </build>
+  <profiles>
+      <profile>
+         <id>release</id>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.jboss.forge.furnace</groupId>
+                  <artifactId>furnace-maven-plugin</artifactId>
+                  <executions>
+                     <execution>
+                        <id>generate-dot</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                           <goal>generate-dot</goal>
+                        </goals>
+                        <configuration>
+                           <attach>true</attach>
+                        </configuration>
+                     </execution>
+                  </executions>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+   </profiles>
 </project>
